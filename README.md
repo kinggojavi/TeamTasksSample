@@ -60,3 +60,28 @@ Repositorio de ejemplo para la creación y gestión de una base de datos de tare
     También se marca 1 si el promedio de retraso (AvgDelayDays) es mayor a 5 días (umbral razonable).
 
     En otros casos, 0.
+
+
+## 📦 Paquetes utilizados
+
+La API se construyó en **.NET 9 (compatible con .NET 8+)** y utiliza los siguientes paquetes:
+
+- **Microsoft.EntityFrameworkCore.SqlServer**  
+  Permite la integración de Entity Framework Core con SQL Server, facilitando el acceso y manipulación de datos mediante LINQ y modelos de entidad.
+
+- **Microsoft.EntityFrameworkCore.Tools**  
+  Proporciona herramientas para trabajar con migraciones y scaffolding de modelos desde la base de datos.  
+  Ejemplo: `dotnet ef migrations add InitialCreate`
+
+- **Swashbuckle.AspNetCore**  
+  Genera documentación interactiva de la API con Swagger/OpenAPI.  
+  Permite probar los endpoints directamente desde el navegador en `/swagger`.
+
+---
+
+### 🔧 Comandos de instalación
+
+```bash
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer
+dotnet add package Microsoft.EntityFrameworkCore.Tools
+dotnet add package Swashbuckle.AspNetCore
