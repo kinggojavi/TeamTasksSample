@@ -34,3 +34,29 @@ Repositorio de ejemplo para la creación y gestión de una base de datos de tare
 
 &nbsp;  cd TeamTasksSample/scripts
 
+
+📌 Reglas asumidas (VIEW TeamTasks.vw_DeveloperRiskSummary)
+
+1. AvgDelayDays:
+
+    Se calcula solo sobre tareas completadas.
+
+    Si se completó antes o en fecha, el retraso es 0.
+
+    Si no hay tareas completadas, se asume 0.
+
+
+2. PredictedCompletionDate:
+
+    Se estima como LatestDueDate + AvgDelayDays.
+
+    Si AvgDelayDays = 0, se asume que se cumplirá en la fecha original.
+
+
+3. HighRiskFlag:
+
+    Se marca 1 si la fecha estimada de completitud supera la última fecha de vencimiento (PredictedCompletionDate > LatestDueDate).
+
+    También se marca 1 si el promedio de retraso (AvgDelayDays) es mayor a 5 días (umbral razonable).
+
+    En otros casos, 0.
