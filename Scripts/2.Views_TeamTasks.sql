@@ -7,13 +7,14 @@ AS
 SELECT 
     d.FirstName + ' ' + d.LastName AS DeveloperName,
     COUNT(t.TaskId) AS OpenTasksCount,
-    AVG(t.EstimatedComplexity) AS AverageEstimatedComplexity
+    isnull(AVG(t.EstimatedComplexity),0) AS AverageEstimatedComplexity
 FROM TeamTasks.Developers d
 LEFT JOIN TeamTasks.Tasks t 
     ON d.DeveloperId = t.AssigneeId 
     AND t.Status <> 'Completed'
 WHERE d.IsActive = 1
-GROUP BY d.FirstName, d.LastName;
+GROUP BY d.FirstName, d.LastName
+
 GO
 
 
@@ -22,14 +23,16 @@ CREATE OR ALTER VIEW TeamTasks.vw_ProjectStatusSummary
 AS
 SELECT 
     p.Name AS ProjectName,
+    p.ClientName,
     COUNT(t.TaskId) AS TotalTasks,
     SUM(CASE WHEN t.Status <> 'Completed' THEN 1 ELSE 0 END) AS OpenTasks,
     SUM(CASE WHEN t.Status = 'Completed' THEN 1 ELSE 0 END) AS CompletedTasks
 FROM TeamTasks.Projects p
 LEFT JOIN TeamTasks.Tasks t 
     ON p.ProjectId = t.ProjectId
-GROUP BY p.Name;
+GROUP BY p.Name,  p.ClientName;
 GO
+
 
 
 CREATE OR ALTER VIEW TeamTasks.vw_TasksDueSoon
@@ -77,7 +80,7 @@ SELECT
     DATEADD(DAY, ISNULL(AVG(c.DelayDays),0), MAX(o.DueDate)) AS PredictedCompletionDate,
     CASE 
         WHEN DATEADD(DAY, ISNULL(AVG(c.DelayDays),0), MAX(o.DueDate)) > MAX(o.DueDate) 
-             OR ISNULL(AVG(c.DelayDays),0) > 5 THEN 1
+             OR ISNULL(AVG(c.DelayDays),0) > 3 THEN 1
         ELSE 0
     END AS HighRiskFlag
 FROM TeamTasks.Developers d
@@ -85,4 +88,5 @@ LEFT JOIN CompletedDelays c ON d.DeveloperId = c.AssigneeId
 LEFT JOIN OpenTasks o ON d.DeveloperId = o.AssigneeId
 WHERE d.IsActive = 1
 GROUP BY d.FirstName, d.LastName;
+
 GO
