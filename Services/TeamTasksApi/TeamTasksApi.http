@@ -1,0 +1,47 @@
+@TeamTasksApi_HostAddress = http://localhost:5200
+
+### 1. Obtener todos los proyectos
+GET {{TeamTasksApi_HostAddress}}/api/projects
+Accept: application/json
+
+###
+
+### 2. Obtener tareas de un proyecto específico (ejemplo: id=1)
+GET {{TeamTasksApi_HostAddress}}/api/projects/1/tasks?page=1&pageSize=5
+Accept: application/json
+
+###
+
+### 3. Dashboard: carga de trabajo por desarrollador
+GET {{TeamTasksApi_HostAddress}}/api/dashboard/developer-workload
+Accept: application/json
+
+###
+
+### 4. Dashboard: salud de proyectos
+GET {{TeamTasksApi_HostAddress}}/api/dashboard/project-health
+Accept: application/json
+
+###
+
+### 5. Dashboard: riesgo de retraso por desarrollador
+GET {{TeamTasksApi_HostAddress}}/api/dashboard/developer-delay-risk
+Accept: application/json
+
+###
+
+### 6. Crear una nueva tarea
+POST {{TeamTasksApi_HostAddress}}/api/tasks
+Content-Type: application/json
+Accept: application/json
+
+{
+  "ProjectId": 1,
+  "Title": "Implementar autenticación",
+  "Description": "Agregar login con JWT",
+  "AssigneeId": 5,
+  "Status": "ToDo",
+  "Priority": "High",
+  "EstimatedComplexity": 3,
+  "DueDate": "2026-03-30T00:00:00"
+}
