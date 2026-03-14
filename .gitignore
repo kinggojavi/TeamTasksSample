@@ -1,3 +1,21 @@
 # Ignorar archivos temporales de Visual Studio
 .vs/
 *.vsidx
+
+# Ignorar binarios y archivos compilados
+bin/
+obj/
+
+# Ignorar archivos de usuario de Visual Studio
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignorar paquetes NuGet
+*.nupkg
+packages/
+
+# Ignorar logs y temporales
+*.log
+*.tmp
