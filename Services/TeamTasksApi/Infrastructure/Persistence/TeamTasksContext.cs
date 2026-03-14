@@ -41,7 +41,6 @@ namespace TeamTasksApi.Infrastructure.Persistence
                 entity.ToTable("Projects", schema: "TeamTasks");
                 entity.HasKey(p => p.ProjectId);
 
-                // Guardar enum ProjectStatus como string
                 entity.Property(p => p.Status)
                       .HasConversion<string>()
                       .HasMaxLength(20);
@@ -53,17 +52,14 @@ namespace TeamTasksApi.Infrastructure.Persistence
                 entity.ToTable("Tasks", schema: "TeamTasks");
                 entity.HasKey(t => t.TaskId);
 
-                // Guardar enum TaskStatus como string
                 entity.Property(t => t.Status)
                       .HasConversion<string>()
                       .HasMaxLength(20);
 
-                // Guardar enum TaskPriority como string
                 entity.Property(t => t.Priority)
                       .HasConversion<string>()
                       .HasMaxLength(10);
 
-                // Relaciones
                 entity.HasOne(t => t.Project)
                       .WithMany(p => p.Tasks)
                       .HasForeignKey(t => t.ProjectId)
@@ -75,12 +71,26 @@ namespace TeamTasksApi.Infrastructure.Persistence
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-            modelBuilder.Entity<DeveloperLoadSummaryView>().HasNoKey().ToView("vw_DeveloperLoadSummary");
-            modelBuilder.Entity<ProjectStatusSummaryView>().HasNoKey().ToView("vw_ProjectStatusSummary");
-            modelBuilder.Entity<TasksDueSoonView>().HasNoKey().ToView("vw_TasksDueSoon");
-            modelBuilder.Entity<DeveloperRiskSummaryView>().HasNoKey().ToView("vw_DeveloperRiskSummary");
+            // Vistas con esquema TeamTasks
+            modelBuilder.Entity<DeveloperLoadSummaryView>()
+                .HasNoKey()
+                .ToView("vw_DeveloperLoadSummary", schema: "TeamTasks");
 
+            modelBuilder.Entity<ProjectStatusSummaryView>()
+                .HasNoKey()
+                .ToView("vw_ProjectStatusSummary", schema: "TeamTasks");
+
+            modelBuilder.Entity<TasksDueSoonView>()
+                .HasNoKey()
+                .ToView("vw_TasksDueSoon", schema: "TeamTasks");
+
+            modelBuilder.Entity<DeveloperRiskSummaryView>()
+                .HasNoKey()
+                .ToView("vw_DeveloperRiskSummary", schema: "TeamTasks");
+
+            // Procedimiento almacenado: no tiene tabla asociada, pero puedes mapear resultados
             modelBuilder.Entity<TaskProcedureResult>().HasNoKey();
         }
+
     }
 }

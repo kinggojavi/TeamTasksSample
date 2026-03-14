@@ -4,7 +4,7 @@
     {
         public string DeveloperName { get; set; }
         public int OpenTasksCount { get; set; }
-        public double AvgDelayDays { get; set; }
+        public int AvgDelayDays { get; set; }
         public DateTime? NearestDueDate { get; set; }
         public DateTime? LatestDueDate { get; set; }
         public DateTime? PredictedCompletionDate { get; set; }

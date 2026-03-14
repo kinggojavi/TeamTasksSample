@@ -5,14 +5,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Servicios
 builder.Services.AddControllers();
-
-// Swagger con Swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // DbContext
 builder.Services.AddDbContext<TeamTasksContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Configurar CORS para permitir llamadas desde Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy => policy
+            .WithOrigins("http://localhost:4200") // origen de tu frontend Angular
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 
 var app = builder.Build();
 
@@ -27,6 +35,12 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+// Activar CORS antes de MapControllers
+app.UseCors("AllowAngular");
+
+// Importante: NO usar autenticación si no la necesitas
+// app.UseAuthentication();  <-- quítalo si estaba agregado
+// app.UseAuthorization();   <-- quítalo si no usas roles/claims
 
 app.MapControllers();
 

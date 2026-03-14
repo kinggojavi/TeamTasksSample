@@ -42,7 +42,11 @@ namespace TeamTasksApi.Controllers
         [HttpGet("developer-load-summary")]
         public async Task<IActionResult> GetDeveloperLoadSummary()
         {
-            var data = await _context.DeveloperLoadSummary.ToListAsync();
+            var data = await _context.DeveloperLoadSummary
+                .OrderBy(d => d.DeveloperName)                // primero ordena por nombre
+                .ThenBy(d => d.AverageEstimatedComplexity)    // luego por promedio de complejidad
+                .ToListAsync();
+
             return Ok(data);
         }
 
