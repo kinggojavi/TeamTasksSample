@@ -1,21 +1,60 @@
-# Ignorar archivos temporales de Visual Studio
+# =========================
+# Visual Studio / .NET Core
+# =========================
+
+# Archivos temporales de Visual Studio
 .vs/
 *.vsidx
 
-# Ignorar binarios y archivos compilados
+# Binarios y compilados
 bin/
 obj/
 
-# Ignorar archivos de usuario de Visual Studio
+# Archivos de usuario de Visual Studio
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
 
-# Ignorar paquetes NuGet
+# Paquetes NuGet
 *.nupkg
 packages/
 
-# Ignorar logs y temporales
+# Logs y temporales
 *.log
 *.tmp
+
+# =========================
+# Angular / Node.js
+# =========================
+
+# Dependencias
+node_modules/
+
+# Salida de compilación Angular
+dist/
+out-tsc/
+tmp/
+
+# Coverage de pruebas
+coverage/
+
+# Caché interno de Angular CLI
+.angular/
+
+# Archivos de entorno locales
+.env
+.env.*.local
+
+# =========================
+# IDEs y editores
+# =========================
+
+# VS Code
+.vscode/
+
+# JetBrains / WebStorm
+.idea/
+
+# Otros temporales
+*.sw?

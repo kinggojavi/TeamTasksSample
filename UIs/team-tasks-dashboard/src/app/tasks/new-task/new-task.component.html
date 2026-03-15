@@ -1,0 +1,84 @@
+<div class="new-task-container">
+  <h2>Nueva Tarea para {{ projectName || projectId }}</h2>
+
+  <form #taskForm="ngForm" (ngSubmit)="onSubmit(taskForm)">
+    <!-- Campos de solo lectura -->
+    <label>Proyecto ID:
+      <input type="text" name="projectId" [(ngModel)]="task.projectId" readonly />
+    </label>
+
+    <label>Nombre del Proyecto:
+      <input type="text" [value]="projectName" readonly />
+    </label>
+
+    <!-- Campos editables -->
+    <label>Título:
+      <input type="text" name="title" [(ngModel)]="task.title" required />
+      <div *ngIf="taskForm.submitted && taskForm.controls['title']?.invalid" class="error">
+        El título es obligatorio.
+      </div>
+    </label>
+
+    <label>Descripción:
+      <textarea name="description" [(ngModel)]="task.description" required></textarea>
+      <div *ngIf="taskForm.submitted && taskForm.controls['description']?.invalid" class="error">
+        La descripción es obligatoria.
+      </div>
+    </label>
+
+    <label>Asignado a:
+      <select name="assigneeId" [(ngModel)]="task.assigneeId" required>
+        <option value="">Seleccione un desarrollador</option>
+        <option *ngFor="let dev of developers" [value]="dev.developerId">
+          {{ dev.fullName }}
+        </option>
+      </select>
+      <div *ngIf="taskForm.submitted && taskForm.controls['assigneeId']?.invalid" class="error">
+        Debe seleccionar un desarrollador.
+      </div>
+    </label>
+
+    <label>Estado:
+      <select name="status" [(ngModel)]="task.status" required>
+        <option value="ToDo">Por Realizar</option>
+        <option value="InProgress">En progreso</option>
+        <option value="Blocked">Bloqueada</option>
+        <option value="Completed">Completada</option>
+      </select>
+      <div *ngIf="taskForm.submitted && taskForm.controls['status']?.invalid" class="error">
+        El estado es obligatorio.
+      </div>
+    </label>
+
+    <label>Prioridad:
+      <select name="priority" [(ngModel)]="task.priority" required>
+        <option value="Low">Baja</option>
+        <option value="Medium">Media</option>
+        <option value="High">Alta</option>
+      </select>
+      <div *ngIf="taskForm.submitted && taskForm.controls['priority']?.invalid" class="error">
+        La prioridad es obligatoria.
+      </div>
+    </label>
+
+    <label>Complejidad estimada:
+      <input type="number" name="estimatedComplexity" [(ngModel)]="task.estimatedComplexity" min="1" required />
+      <div *ngIf="taskForm.submitted && taskForm.controls['estimatedComplexity']?.invalid" class="error">
+        La complejidad estimada es obligatoria y debe ser mayor a 0.
+      </div>
+    </label>
+
+    <label>Fecha de vencimiento:
+      <input type="date" name="dueDate" [(ngModel)]="task.dueDate" required />
+      <div *ngIf="taskForm.submitted && taskForm.controls['dueDate']?.invalid" class="error">
+        La fecha de vencimiento es obligatoria.
+      </div>
+    </label>
+
+    <button type="submit">Crear Tarea</button>
+    <button type="button" (click)="goBack()" class="back-button">Atrás</button>
+  </form>
+
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+</div>

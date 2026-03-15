@@ -1,0 +1,83 @@
+<div class="tasks-container">
+  <h2>Tareas del Proyecto {{ projectName || projectId }}</h2> <!-- mostrar nombre si existe -->
+
+  <!-- Filtros -->
+  <div class="filters">
+    <label>Estado:
+      <select [(ngModel)]="selectedState" (change)="onFilterChange()">
+        <option value="">Todos</option>
+        <option value="ToDo">Por Realizar</option>
+        <option value="InProgress">En progreso</option>
+        <option value="Blocked">Bloqueada</option>
+        <option value="Completed">Completada</option>
+      </select>
+    </label>
+    <label>Desarrollador:
+      <select [(ngModel)]="selectedDeveloper" (change)="onFilterChange()">
+        <option value="">Todos</option>
+        <option *ngFor="let dev of developers" [value]="dev.id">
+          {{ dev.name }}
+        </option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Botón para crear nueva tarea -->
+  <button (click)="goToNewTask()" class="new-task-button">
+    New Task
+  </button>
+
+  <!-- Tabla -->
+  <table>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Asignado a</th>
+        <th>Estado</th>
+        <th>Prioridad</th>
+        <th>Complejidad estimada</th>
+        <th>Fecha de creación</th>
+        <th>Fecha de vencimiento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks" (click)="showTaskDetail(task)">
+        <td>{{ task.title }}</td>
+        <td>{{ task.assignedTo }}</td>
+        <td>{{ task.status }}</td>
+        <td>{{ task.priority }}</td>
+        <td>{{ task.estimatedComplexity }}</td>
+        <td>{{ task.createdAt | date:'dd/MM/yyyy' }}</td>
+        <td>{{ task.dueDate | date:'dd/MM/yyyy' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Paginación -->
+  <div class="pagination">
+    <button (click)="onPageChange(page-1)" [disabled]="page === 1">Anterior</button>
+    <span>Página {{ page }}</span>
+    <button (click)="onPageChange(page+1)">Siguiente</button>
+  </div>
+
+  <!-- Detalle de tarea -->
+  <div class="task-detail" *ngIf="selectedTask">
+    <h3>Detalle de tarea</h3>
+    <p><strong>Título:</strong> {{ selectedTask.title }}</p>
+    <p><strong>Asignado a:</strong> {{ selectedTask.assignedTo }}</p>
+    <p><strong>Estado:</strong> {{ selectedTask.status }}</p>
+    <p><strong>Prioridad:</strong> {{ selectedTask.priority }}</p>
+    <p><strong>Complejidad estimada:</strong> {{ selectedTask.estimatedComplexity }}</p>
+    <p><strong>Fecha de creación:</strong> {{ selectedTask.createdAt | date:'dd/MM/yyyy' }}</p>
+    <p><strong>Fecha de vencimiento:</strong> {{ selectedTask.dueDate | date:'dd/MM/yyyy' }}</p>
+    <button (click)="closeDetail()">Cerrar</button>
+  </div>
+
+  <!-- Gráfico de tareas por estado -->
+  <div class="tasks-chart">
+    <h3>Distribución de tareas por estado</h3>
+    <canvas id="tasksChart"></canvas>
+  </div>
+
+
+</div>

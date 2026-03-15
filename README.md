@@ -1,153 +1,133 @@
-\# TeamTasksSample
+markdown
+# 📌 TeamTasksSample
 
-
-
-Repositorio de ejemplo para la creación y gestión de una base de datos de tareas de equipo en \*\*SQL Server\*\*.
-
-
-
-\## 📌 Contenido
-
-\- `scripts/DBSetup\_TeamTasks.sql`: Script principal para crear la base de datos, esquemas, tablas y datos de prueba.
-
-\- Futuras carpetas podrán incluir documentación, ejemplos de consultas y scripts adicionales.
-
-
-
-\## 🚀 Requisitos
-
-\- SQL Server 2019 o superior (funciona también en versiones anteriores con ajustes mínimos).
-
-\- SQL Server Management Studio (SSMS) o cualquier cliente compatible.
-
-\- Permisos de administrador para crear bases de datos.
-
-
-
-\## ⚙️ Instalación
-
-1\. Clona este repositorio:
-
-&nbsp;  ```bash
-
-&nbsp;  git clone https://github.com/kinggojavi/TeamTasksSample.git
-
-&nbsp;  cd TeamTasksSample/scripts
-
-
-📌 Reglas asumidas (VIEW TeamTasks.vw_DeveloperRiskSummary)
-
-1. AvgDelayDays:
-
-    Se calcula solo sobre tareas completadas.
-
-    Si se completó antes o en fecha, el retraso es 0.
-
-    Si no hay tareas completadas, se asume 0.
-
-
-2. PredictedCompletionDate:
-
-    Se estima como LatestDueDate + AvgDelayDays.
-
-    Si AvgDelayDays = 0, se asume que se cumplirá en la fecha original.
-
-
-3. HighRiskFlag:
-
-    Se marca 1 si la fecha estimada de completitud supera la última fecha de vencimiento (PredictedCompletionDate > LatestDueDate).
-
-    También se marca 1 si el promedio de retraso (AvgDelayDays) es mayor a 5 días (umbral razonable).
-
-    En otros casos, 0.
-
-
-## 📦 Paquetes utilizados
-
-La API se construyó en **.NET 9 (compatible con .NET 8+)** y utiliza los siguientes paquetes:
-
-- **Microsoft.EntityFrameworkCore (v9.0.14)**  
-  Núcleo de Entity Framework Core. Proporciona el ORM (Object-Relational Mapping) que permite trabajar con la base de datos mediante clases y LINQ en lugar de SQL directo.
-
-- **Microsoft.EntityFrameworkCore.SqlServer (v9.0.14)**  
-  Proveedor específico para SQL Server. Permite que EF Core se conecte y traduzca las consultas LINQ a instrucciones SQL optimizadas para SQL Server.
-
-- **Microsoft.EntityFrameworkCore.Tools (v9.0.14)**  
-  Herramientas de línea de comandos para trabajar con migraciones y scaffolding.  
-  Ejemplos de uso:
-  - Crear una migración inicial:  
-    ```bash
-    dotnet ef migrations add InitialCreate
-    ```
-  - Aplicar migraciones a la base de datos:  
-    ```bash
-    dotnet ef database update
-    ```
-
-- **Swashbuckle.AspNetCore (última versión estable)**  
-  Genera documentación interactiva de la API con Swagger/OpenAPI.  
-  Permite probar los endpoints directamente desde el navegador en la ruta `/swagger`.
+Repositorio de ejemplo para la creación y gestión de una base de datos de tareas de equipo en **SQL Server**, con un backend en **.NET 9** y un frontend en **Angular**.
 
 ---
 
-### 🔧 Instalación
+## 📂 Contenido del repositorio
 
-```bash
-dotnet add package Microsoft.EntityFrameworkCore --version 9.0.14
-dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 9.0.14
-dotnet add package Microsoft.EntityFrameworkCore.Tools --version 9.0.14
-dotnet add package Swashbuckle.AspNetCore
+- `scripts/DBSetup_TeamTasks.sql`  
+  Script principal para crear la base de datos, esquemas, tablas y datos de prueba.
 
+- `TeamTasksApi/`  
+  Proyecto backend en .NET para exponer la API REST.
 
-# TeamTasks API - Endpoints del Dashboard
-
-Este controlador expone diferentes endpoints para gestionar proyectos, tareas y vistas relacionadas con el estado del equipo.
-
-## Endpoints
-
-### 1. Proyectos
-- **GET** `/api/dashboard/projects`  
-  Obtiene todos los proyectos.
-
-### 2. Tareas de un proyecto
-- **GET** `/api/dashboard/projects/{id}/tasks?page={page}&pageSize={pageSize}`  
-  Obtiene las tareas de un proyecto específico con paginación.
-
-### 3. Carga de trabajo por desarrollador
-- **GET** `/api/dashboard/developer-load-summary`  
-  Vista con el resumen de carga de trabajo por desarrollador.
-
-### 4. Estado de proyectos
-- **GET** `/api/dashboard/project-status-summary`  
-  Vista con el resumen del estado de los proyectos.
-
-### 5. Tareas próximas a vencer
-- **GET** `/api/dashboard/tasks-due-soon`  
-  Vista con las tareas que están próximas a vencer.
-
-### 6. Riesgo de retraso por desarrollador
-- **GET** `/api/dashboard/developer-risk-summary`  
-  Vista con el riesgo de retraso por desarrollador.
-
-### 7. Desarrolladores activos
-- **GET** `/api/dashboard/developers`  
-  Obtiene los desarrolladores activos con su información básica (ID, nombre completo y correo).
-
-### 8. Actualizar estado de una tarea
-- **PUT** `/api/dashboard/tasks/{id}/status`  
-  Actualiza el estado, prioridad o complejidad estimada de una tarea.  
-  **Body:** `TaskUpdateDto`
-
-### 9. Crear una nueva tarea (procedimiento almacenado)
-- **POST** `/api/dashboard/tasks`  
-  Crea una nueva tarea usando el procedimiento almacenado `TeamTasks.InsertTask`.  
-  **Body:** `TaskItemInsertDto`
+- `UIs/team-tasks-dashboard/`  
+  Proyecto frontend en Angular para consumir la API y mostrar la información.
 
 ---
 
-## Notas
-- Los endpoints de vistas (`summary`) dependen de consultas predefinidas en la base de datos.  
-- La creación de tareas se realiza mediante un procedimiento almacenado para garantizar consistencia en la inserción.  
-- La paginación en tareas de proyectos se controla con parámetros `page` y `pageSize`.
+## 🚀 Requisitos
 
+### Backend
+- .NET 9 (compatible con .NET 8+)
+- SQL Server 2019 o superior
+- SQL Server Management Studio (SSMS) o cliente compatible
+- Permisos de administrador para crear bases de datos
 
+### Frontend
+- Node.js (versión LTS recomendada)
+- Angular CLI instalado globalmente:
+  bash
+  npm install -g @angular/cli
+⚙️ Instalación y ejecución
+1. Configuración de la base de datos
+Abrir SQL Server Management Studio.
+
+Ejecutar el script scripts/DBSetup_TeamTasks.sql para crear la base de datos y datos de prueba.
+
+2. Ejecutar el backend (API .NET)
+Abrir una ventana de comandos en la carpeta del proyecto backend:
+
+bash
+cd TeamTasksApi
+Restaurar paquetes y ejecutar la API:
+
+bash
+dotnet restore
+dotnet run
+La API quedará disponible en:
+
+http://localhost:5200/api
+
+Documentación Swagger: http://localhost:5200/swagger
+
+3. Ejecutar el frontend (Angular)
+Navegar a la carpeta del frontend:
+
+bash
+cd UIs/team-tasks-dashboard
+Instalar dependencias:
+
+bash
+npm install
+Iniciar el servidor de desarrollo:
+
+bash
+ng serve -o
+Esto abrirá automáticamente el navegador en http://localhost:4200.
+
+📦 Paquetes utilizados en el backend
+Microsoft.EntityFrameworkCore (v9.0.14) – ORM para trabajar con SQL Server.
+
+Microsoft.EntityFrameworkCore.SqlServer (v9.0.14) – Proveedor específico para SQL Server.
+
+Microsoft.EntityFrameworkCore.Tools (v9.0.14) – Herramientas para migraciones y scaffolding.
+
+Swashbuckle.AspNetCore – Genera documentación interactiva con Swagger/OpenAPI.
+
+Ejemplo de migraciones:
+
+bash
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+🔗 Endpoints principales del Dashboard
+Proyectos
+GET /api/dashboard/projects
+
+Tareas de un proyecto
+GET /api/dashboard/projects/{id}/tasks?page={page}&pageSize={pageSize}
+
+Carga de trabajo por desarrollador
+GET /api/dashboard/developer-load-summary
+
+Estado de proyectos
+GET /api/dashboard/project-status-summary
+
+Tareas próximas a vencer
+GET /api/dashboard/tasks-due-soon
+
+Riesgo de retraso por desarrollador
+GET /api/dashboard/developer-risk-summary
+
+Desarrolladores activos
+GET /api/dashboard/developers
+
+Actualizar estado de una tarea
+PUT /api/dashboard/tasks/{id}/status
+
+Crear nueva tarea (procedimiento almacenado)
+POST /api/dashboard/tasks
+
+🖥️ Navegabilidad del Frontend
+El frontend en Angular ofrece las siguientes vistas:
+
+Dashboard principal: muestra carga de trabajo, riesgos y estado de proyectos.
+
+Vista de proyectos: lista de proyectos disponibles.
+
+Vista de tareas de un proyecto: tareas filtradas por proyecto con paginación.
+
+Formulario de nueva tarea: permite crear una tarea asignando desarrollador, estado, prioridad y fecha de vencimiento.
+
+Actualización de estado de tarea: modificar estado, prioridad o complejidad.
+
+📌 Notas
+Los endpoints de vistas (summary) dependen de consultas predefinidas en la base de datos.
+
+La creación de tareas se realiza mediante un procedimiento almacenado para garantizar consistencia.
+
+La paginación en tareas de proyectos se controla con parámetros page y pageSize.
+
+El frontend consume directamente los endpoints del backend y muestra mensajes de validación en los formularios.
