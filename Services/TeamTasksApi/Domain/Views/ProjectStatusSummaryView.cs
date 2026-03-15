@@ -2,6 +2,7 @@
 {
     public class ProjectStatusSummaryView
     {
+        public int ProjectId { get; set; }
         public string ProjectName { get; set; }
         public string ClientName { get; set; }
         public int TotalTasks { get; set; }

@@ -2,13 +2,14 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using TeamTasksApi.Domain.Dtos;
+using TeamTasksApi.Domain.Entities;
 using TeamTasksApi.Infrastructure.Persistence;
 
 
 namespace TeamTasksApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api")]
     public class DashboardController : ControllerBase
     {
         private readonly TeamTasksContext _context;
@@ -26,17 +27,58 @@ namespace TeamTasksApi.Controllers
             return Ok(data);
         }
 
-        // 2. Obtener tareas de un proyecto específico
+        // 2. Obtener tareas de un proyecto específico con filtros opcionales
         [HttpGet("projects/{id}/tasks")]
-        public async Task<IActionResult> GetProjectTasks(int id, int page = 1, int pageSize = 5)
+        public async Task<IActionResult> GetProjectTasks(
+            int id,
+            int page = 1,
+            int pageSize = 5,
+            string? state = null,
+            int? developer = null)
         {
-            var data = await _context.Tasks
-                .Where(t => t.ProjectId == id)
+            // Construir la consulta base
+            IQueryable<TaskItem> query = _context.Tasks
+                .Include(t => t.Assignee)
+                .Where(t => t.ProjectId == id);
+
+            // Filtro opcional por estado
+            if (!string.IsNullOrEmpty(state))
+            {
+                query = query.Where(t => t.Status == state);
+            }
+
+            // Filtro opcional por desarrollador
+            if (developer.HasValue)
+            {
+                query = query.Where(t => t.AssigneeId == developer.Value);
+            }
+
+            // Proyección y paginación
+            var data = await query
+                .OrderBy(t => t.Title)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
+                .Select(d => new
+                {
+                    d.TaskId,
+                    d.ProjectId,
+                    d.Title,
+                    d.Description,
+                    d.AssigneeId,
+                    d.Status,
+                    d.Priority,
+                    d.EstimatedComplexity,
+                    d.DueDate,
+                    d.CompletionDate,
+                    d.CreatedAt,
+                    AssignedTo = d.Assignee.FullName
+                })
                 .ToListAsync();
+
             return Ok(data);
         }
+
+
 
         // 3. Vista: carga de trabajo por desarrollador
         [HttpGet("developer-load-summary")]
@@ -54,7 +96,9 @@ namespace TeamTasksApi.Controllers
         [HttpGet("project-status-summary")]
         public async Task<IActionResult> GetProjectStatusSummary()
         {
-            var data = await _context.ProjectStatusSummary.ToListAsync();
+            var data = await _context.ProjectStatusSummary
+                .OrderBy(p => p.ProjectName)
+                .ToListAsync();
             return Ok(data);
         }
 
@@ -70,7 +114,9 @@ namespace TeamTasksApi.Controllers
         [HttpGet("developer-risk-summary")]
         public async Task<IActionResult> GetDeveloperRiskSummary()
         {
-            var data = await _context.DeveloperRiskSummary.ToListAsync();
+            var data = await _context.DeveloperRiskSummary
+                .OrderBy(p => p.DeveloperName)
+                .ToListAsync();
             return Ok(data);
         }
 
@@ -102,11 +148,11 @@ namespace TeamTasksApi.Controllers
             }
 
             // Actualizar campos si vienen en el DTO
-            if (update.Status.HasValue)
-                task.Status = update.Status.Value;
+            if (update.Status is not null)
+                task.Status = update.Status;
 
-            if (update.Priority.HasValue)
-                task.Priority = update.Priority.Value;
+            if (update.Priority is not null)
+                task.Priority = update.Priority;
 
             if (update.EstimatedComplexity.HasValue)
                 task.EstimatedComplexity = update.EstimatedComplexity.Value;
@@ -128,8 +174,8 @@ namespace TeamTasksApi.Controllers
                     new SqlParameter("@Title", newTask.Title ?? (object)DBNull.Value),
                     new SqlParameter("@Description", newTask.Description ?? (object)DBNull.Value),
                     new SqlParameter("@AssigneeId", newTask.AssigneeId),
-                    new SqlParameter("@Status", newTask.Status.ToString()),     // Enum → NVARCHAR
-                    new SqlParameter("@Priority", newTask.Priority.ToString()), // Enum → NVARCHAR
+                    new SqlParameter("@Status", newTask.Status),    
+                    new SqlParameter("@Priority", newTask.Priority),
                     new SqlParameter("@EstimatedComplexity", newTask.EstimatedComplexity),
                     new SqlParameter("@DueDate", newTask.DueDate),
                     new SqlParameter("@CompletionDate", newTask.CompletionDate ?? (object)DBNull.Value)

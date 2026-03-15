@@ -1,6 +1,4 @@
-﻿using TeamTasksApi.Domain.Enums;
-
-namespace TeamTasksApi.Domain.Entities
+﻿namespace TeamTasksApi.Domain.Entities
 {
     public class Project
     {
@@ -10,7 +8,7 @@ namespace TeamTasksApi.Domain.Entities
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
-        public ProjectStatus Status { get; set; } = ProjectStatus.Planned;
+        public string Status { get; set; } = "Planned";
 
         public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();
     }

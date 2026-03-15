@@ -21,7 +21,7 @@ GO
 
 CREATE OR ALTER VIEW TeamTasks.vw_ProjectStatusSummary
 AS
-SELECT 
+SELECT p.ProjectId,
     p.Name AS ProjectName,
     p.ClientName,
     COUNT(t.TaskId) AS TotalTasks,
@@ -30,7 +30,7 @@ SELECT
 FROM TeamTasks.Projects p
 LEFT JOIN TeamTasks.Tasks t 
     ON p.ProjectId = t.ProjectId
-GROUP BY p.Name,  p.ClientName;
+GROUP BY p.ProjectId, p.Name,  p.ClientName;
 GO
 
 

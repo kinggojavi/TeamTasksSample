@@ -1,6 +1,4 @@
-﻿using TeamTasksApi.Domain.Enums;
-using TaskStatus = TeamTasksApi.Domain.Enums.TaskStatus;
-
+﻿
 namespace TeamTasksApi.Domain.Entities
 {
     public class TaskItem
@@ -11,8 +9,8 @@ namespace TeamTasksApi.Domain.Entities
         public string? Description { get; set; }
         public int AssigneeId { get; set; }
 
-        public TaskStatus Status { get; set; } = TaskStatus.ToDo;
-        public TaskPriority Priority { get; set; } = TaskPriority.Medium;
+        public string Status { get; set; } = "ToDo";
+        public string Priority { get; set; } = "Medium";
         public int EstimatedComplexity { get; set; } = 1;
 
         public DateTime? DueDate { get; set; }
