@@ -27,48 +27,60 @@ Repositorio de ejemplo para la creación y gestión de una base de datos de tare
 - Permisos de administrador para crear bases de datos
 
 ### Frontend
-- Node.js (versión LTS recomendada)
-- Angular CLI instalado globalmente:
-  bash
-  npm install -g @angular/cli
-⚙️ Instalación y ejecución
-1. Configuración de la base de datos
+
+Angular CLI: 18.2.21
+Node: 20.19.0
+Package Manager: npm 10.8.2
+OS: win32 x64
+
+Angular: 18.2.14
+... animations, common, compiler, compiler-cli, core, forms
+... platform-browser, platform-browser-dynamic, router
+
+## ⚙️ Instalación y ejecución
+
+### 1. Configuración de la base de datos
 Abrir SQL Server Management Studio.
 
-Ejecutar el script scripts/DBSetup_TeamTasks.sql para crear la base de datos y datos de prueba.
+Ejecutar el los scripst de la carpeta scripts: DBSetup_TeamTasks.sql, 2.Views_TeamTasks.sql y 3.Procedures_TeamTasks.sql en ese orden,  para crear la base de datos y datos de prueba.
 
-2. Ejecutar el backend (API .NET)
-Abrir una ventana de comandos en la carpeta del proyecto backend:
+### 2. Ejecutar el backend (API .NET)
+Abrir una ventana de comandos en la carpeta del proyecto backend TeamTasksApi:
 
 bash
 cd TeamTasksApi
+
 Restaurar paquetes y ejecutar la API:
 
 bash
 dotnet restore
 dotnet run
+
 La API quedará disponible en:
 
 http://localhost:5200/api
 
 Documentación Swagger: http://localhost:5200/swagger
 
-3. Ejecutar el frontend (Angular)
-Navegar a la carpeta del frontend:
+### 3. Ejecutar el frontend (Angular)
+Navegar a la carpeta del frontend UIs\team-tasks-dashboard:
 
 bash
 cd UIs/team-tasks-dashboard
+
 Instalar dependencias:
 
 bash
 npm install
+
 Iniciar el servidor de desarrollo:
 
 bash
 ng serve -o
 Esto abrirá automáticamente el navegador en http://localhost:4200.
 
-📦 Paquetes utilizados en el backend
+## 📦 Paquetes utilizados en el backend
+
 Microsoft.EntityFrameworkCore (v9.0.14) – ORM para trabajar con SQL Server.
 
 Microsoft.EntityFrameworkCore.SqlServer (v9.0.14) – Proveedor específico para SQL Server.
@@ -82,7 +94,9 @@ Ejemplo de migraciones:
 bash
 dotnet ef migrations add InitialCreate
 dotnet ef database update
-🔗 Endpoints principales del Dashboard
+
+## 🔗 Endpoints principales del Dashboard
+
 Proyectos
 GET /api/dashboard/projects
 
@@ -110,7 +124,26 @@ PUT /api/dashboard/tasks/{id}/status
 Crear nueva tarea (procedimiento almacenado)
 POST /api/dashboard/tasks
 
-🖥️ Navegabilidad del Frontend
+## 📦 Paquetes utilizados en el frontend
+
+Angular CLI – Framework para la construcción de la UI.
+
+Chart.js – Librería principal para gráficos interactivos.
+
+chartjs-plugin-datalabels – Plugin para mostrar valores internos en gráficos (labels dentro de barras o porciones).
+
+rxjs – Manejo de programación reactiva en Angular.
+
+zone.js – Soporte para el motor de Angular.
+
+Ejemplo de instalación de librerías de gráficos:
+
+bash
+npm install chart.js chartjs-plugin-datalabels
+
+
+## 🖥️ Navegabilidad del Frontend
+
 El frontend en Angular ofrece las siguientes vistas:
 
 Dashboard principal: muestra carga de trabajo, riesgos y estado de proyectos.
@@ -123,7 +156,10 @@ Formulario de nueva tarea: permite crear una tarea asignando desarrollador, esta
 
 Actualización de estado de tarea: modificar estado, prioridad o complejidad.
 
-📌 Notas
+
+
+## 📌 Notas
+
 Los endpoints de vistas (summary) dependen de consultas predefinidas en la base de datos.
 
 La creación de tareas se realiza mediante un procedimiento almacenado para garantizar consistencia.
