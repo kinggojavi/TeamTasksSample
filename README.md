@@ -151,7 +151,7 @@ Dashboard principal: muestra carga de trabajo, riesgos y estado de proyectos.
 Vista de proyectos: lista de proyectos disponibles.
 
 Vista de tareas de un proyecto: tareas filtradas por proyecto con paginación.
-
+![Screenshot Tareas por Prouecto.](https://github.com/kinggojavi/TeamTasksSample/blob/main/Images/TareasProyecto.png)
 Formulario de nueva tarea: permite crear una tarea asignando desarrollador, estado, prioridad y fecha de vencimiento.
 
 Actualización de estado de tarea: modificar estado, prioridad o complejidad.
