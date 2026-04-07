@@ -1,0 +1,20 @@
+.dashboard {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Títulos */
+h2 {
+  text-transform: uppercase;
+  margin: 30px 0 20px 0; /* más espacio arriba y abajo */
+  color: #004080; /* Azul oscuro elegante */
+  font-size: 1.6rem;
+  letter-spacing: 1px;
+}
+
+/* Contenedor para centrar tablas y dar espacio */
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px; /* más espacio entre tablas */
+}

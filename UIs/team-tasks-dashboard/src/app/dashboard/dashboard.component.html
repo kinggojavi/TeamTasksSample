@@ -1,0 +1,50 @@
+<div class="dashboard">
+
+  <!-- Tabla 1: CARGA POR DESARROLLADOR -->
+  <h2>CARGA POR DESARROLLADOR</h2>
+  <div class="table-container">
+    <app-reusable-table 
+      [columns]="[
+        {header:'DESARROLLADOR', field:'developerName', sortable:true},
+        {header:'TAREAS ABIERTAS', field:'openTasksCount', sortable:true},
+        {header:'COMPLEJIDAD TOTAL ESTIMADA', field:'averageEstimatedComplexity'}
+      ]"
+      [data]="developerWorkload">
+    </app-reusable-table>
+  </div>
+
+  <!-- Tabla 2: ESTADO POR PROYECTO -->
+  <h2>ESTADO POR PROYECTO</h2>
+  <div class="table-container">
+    <app-reusable-table 
+      [columns]="[
+        {header:'PROYECTO', field:'projectName', isLink:true, linkField:'projectId'},
+        {header:'CLIENTE', field:'clientName'},
+        {header:'TOTAL TAREAS', field:'totalTasks'},
+        {header:'ABIERTAS', field:'openTasks'},
+        {header:'COMPLETADAS', field:'completedTasks'}
+      ]"
+      [data]="projectHealth"
+      [rowClassFn]="isProjectHighlighted">
+    </app-reusable-table>
+  </div>
+
+  <!-- Tabla 3: RIESGO DE RETRASO POR DESARROLLADOR -->
+  <h2>RIESGO DE RETRASO POR DESARROLLADOR</h2>
+  <div class="table-container">
+    <app-reusable-table 
+      [columns]="[
+        {header:'DESARROLLADOR', field:'developerName'},
+        {header:'TAREAS ABIERTAS', field:'openTasksCount'},
+        {header:'PROMEDIO DÍAS DE RETRASO', field:'avgDelayDays'},
+        {header:'FECHA MÁS PRÓXIMA', field:'nearestDueDate'},
+        {header:'FECHA MÁS LEJANA', field:'latestDueDate'},
+        {header:'PREDICCIÓN DE FINALIZACIÓN', field:'predictedCompletionDate'},
+        {header:'RIESGO ALTO', field:'highRiskFlag'}
+      ]"
+      [data]="developerRisk"
+      [rowClassFn]="isHighRisk">
+    </app-reusable-table>
+  </div>
+
+</div>

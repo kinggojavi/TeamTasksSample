@@ -1,0 +1,41 @@
+<table>
+  <thead>
+    <tr>
+      <th *ngFor="let col of columns" (click)="col.sortable && sort(col.field)">
+        {{ col.header }}
+        <span *ngIf="col.sortable">
+          {{ sortDirection[col.field] === 'asc' ? '▲' : '▼' }}
+        </span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of data" [ngClass]="rowClassFn ? rowClassFn(row) : ''">
+      <td *ngFor="let col of columns">
+        <!-- Si la columna es link y tiene linkField definido -->
+        <ng-container *ngIf="col.isLink && col.linkField; else normalCell">
+            <a [routerLink]="['/projects', row[col.linkField!]]" 
+                [queryParams]="{ projectName: row['projectName'] }"
+                class="table-link">
+                {{ row[col.field] }}
+            </a>
+        </ng-container>
+
+        <!-- Si no es link -->
+        <ng-template #normalCell>
+          <ng-container *ngIf="isDate(row[col.field]); else notDate">
+            {{ row[col.field] | date:'dd/MM/yyyy' }}
+          </ng-container>
+          <ng-template #notDate>
+            <ng-container *ngIf="isNumber(row[col.field]); else plain">
+              {{ row[col.field] }}
+            </ng-container>
+            <ng-template #plain>
+              {{ row[col.field] }}
+            </ng-template>
+          </ng-template>
+        </ng-template>
+      </td>
+    </tr>
+  </tbody>
+</table>
